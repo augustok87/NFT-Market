@@ -5,15 +5,25 @@ require('dotenv').config()
 const fs = require('fs');
 // const infuraId = fs.readFileSync(".infuraid").toString().trim() || "";
 
-task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-  const accounts = await hre.ethers.getSigners();
+// task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
+//   const accounts = await hre.ethers.getSigners();
 
-  for (const account of accounts) {
-    console.log(account.address);
-  }
-});
+//   for (const account of accounts) {
+//     console.log(account.address);
+//   }
+// });
 
 module.exports = {
+  webpack: (config, { isServer }) => {
+    // Fixes npm packages that depend on `fs` module
+    if (!isServer) {
+      config.node = {
+        fs: 'empty'
+      }
+    }
+
+    return config
+  },
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
